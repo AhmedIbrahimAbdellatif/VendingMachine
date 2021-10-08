@@ -54,9 +54,10 @@ public class CoinInsertionModuleImpl implements CoinInsertionModule{
         for (String coin : coins) {
             if (!validCoins.contains(coin)) {
                 isAllValid = false;
+                coinStorageRepo.addRejected(coin);
             }
             else {
-                coinStorageRepo.add(coin, coinsNameValue.get(coin));
+                coinStorageRepo.addAccepted(coin, coinsNameValue.get(coin));
             }
         }
         return isAllValid;

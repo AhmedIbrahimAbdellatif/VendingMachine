@@ -36,9 +36,9 @@ public class CoinInsertionTest {
 
         boolean actual = moduleUnderTest.acceptCoins(coins);
 
-        verify(coinStorageRepo, times(1)).add("nickle", 0.05);
-        verify(coinStorageRepo, times(1)).add("dime", 0.1);
-        verify(coinStorageRepo, times(1)).add("quarter", 0.25);
+        verify(coinStorageRepo, times(1)).addAccepted("nickle", 0.05);
+        verify(coinStorageRepo, times(1)).addAccepted("dime", 0.1);
+        verify(coinStorageRepo, times(1)).addAccepted("quarter", 0.25);
         verifyNoMoreInteractions(coinStorageRepo);
         assertTrue(actual);
     }
@@ -49,9 +49,10 @@ public class CoinInsertionTest {
 
         boolean actual = moduleUnderTest.acceptCoins(coins);
 
-        verify(coinStorageRepo, times(1)).add("nickle", 0.05);
-        verify(coinStorageRepo, times(1)).add("dime", 0.1);
-        verify(coinStorageRepo, times(1)).add("quarter", 0.25);
+        verify(coinStorageRepo, times(1)).addAccepted("nickle", 0.05);
+        verify(coinStorageRepo, times(1)).addAccepted("dime", 0.1);
+        verify(coinStorageRepo, times(1)).addAccepted("quarter", 0.25);
+        verify(coinStorageRepo, times(1)).addRejected("cent");
         verifyNoMoreInteractions(coinStorageRepo);
         assertFalse(actual);
     }
