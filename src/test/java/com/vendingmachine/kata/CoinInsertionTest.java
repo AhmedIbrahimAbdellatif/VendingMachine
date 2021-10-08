@@ -31,7 +31,7 @@ public class CoinInsertionTest {
     }
 
     @Test
-    void accept_coins_all_valid() {
+    void accept_coins_test_all_valid() {
         List<String> coins = List.of("nickle", "dime", "quarter");
 
         boolean actual = moduleUnderTest.acceptCoins(coins);
@@ -44,7 +44,7 @@ public class CoinInsertionTest {
     }
 
     @Test
-    void accept_coins_detect_invalid() {
+    void accept_coins_test_detecting_invalid() {
         List<String> coins = List.of("nickle", "dime", "quarter", "cent");
 
         boolean actual = moduleUnderTest.acceptCoins(coins);
@@ -54,5 +54,13 @@ public class CoinInsertionTest {
         verify(coinStorageRepo, times(1)).add("quarter", 0.25);
         verifyNoMoreInteractions(coinStorageRepo);
         assertFalse(actual);
+    }
+
+    @Test
+    void test_get_accepted_amount() {
+        moduleUnderTest.getAcceptedAmount();
+
+        verify(coinStorageRepo, times(1)).getStoredAmount();
+        verifyNoMoreInteractions(coinStorageRepo);
     }
 }

@@ -64,7 +64,7 @@ public class CoinInsertionModuleImpl implements CoinInsertionModule{
 
     @Override
     public Double getAcceptedAmount() {
-        return null;
+        return coinStorageRepo.getStoredAmount();
     }
 
     @Override
