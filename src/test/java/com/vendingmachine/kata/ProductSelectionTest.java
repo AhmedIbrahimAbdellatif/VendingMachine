@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -35,5 +36,14 @@ public class ProductSelectionTest {
         boolean actual = moduleUnderTest.selectProduct("cola");
 
         assertTrue(actual);
+    }
+
+    @Test
+    void test_selecting_valid_unavailable_product() {
+        when(productRepo.isProductAvailable(anyString())).thenReturn(false);
+
+        boolean actual = moduleUnderTest.selectProduct("cola");
+
+        assertFalse(actual);
     }
 }
