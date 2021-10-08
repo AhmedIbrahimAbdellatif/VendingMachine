@@ -114,7 +114,7 @@ public class VendingMachineTest {
     }
 
     @Test
-    void buy_product_test_valid_product_money_equal_price_success() {
+    void buy_product_test_valid_product_money_equal_price() {
         String product = "cola";
         when(productSelectionModule.selectProduct(anyString())).thenReturn(true);
         when(productSelectionModule.getSelectedProductPrice()).thenReturn(1.00);
@@ -171,6 +171,26 @@ public class VendingMachineTest {
 
         String expectedMessage = "EXACT CHANGE ONLY";
         Double expectedChangeReturn = 1.5;
+        String expectedProductOut = "NONE";
+        assertEquals(expectedMessage, actualMessage);
+        assertEquals(expectedChangeReturn, actualChangeReturn);
+        assertEquals(expectedProductOut, actualProductOut);
+    }
+
+    @Test
+    void buy_product_test_valid_product_money_less_than_price() {
+        String product = "cola";
+        when(productSelectionModule.selectProduct(anyString())).thenReturn(true);
+        when(productSelectionModule.getSelectedProductPrice()).thenReturn(1.00);
+        when(coinInsertionModule.getAcceptedAmount()).thenReturn(0.50);
+
+        Triplet<String, Double, String> actualOutput = machineUnderTest.buyProduct(product);
+        String actualMessage = actualOutput.getValue(VendingMachine.ParameterOrder.MESSAGE.ordinal()).toString();
+        Double actualChangeReturn = (Double)actualOutput.getValue(VendingMachine.ParameterOrder.MONEY_RETURN.ordinal());
+        String actualProductOut = actualOutput.getValue(VendingMachine.ParameterOrder.PRODUCT.ordinal()).toString();
+
+        String expectedMessage = "INSERT COIN";
+        Double expectedChangeReturn = 0.0;
         String expectedProductOut = "NONE";
         assertEquals(expectedMessage, actualMessage);
         assertEquals(expectedChangeReturn, actualChangeReturn);

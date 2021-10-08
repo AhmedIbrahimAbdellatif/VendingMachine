@@ -76,7 +76,12 @@ public class VendingMachine {
         boolean isSelectSuccessful = productSelectionModule.selectProduct(product);
         if(isSelectSuccessful) {
             Double moneyChange = coinInsertionModule.getAcceptedAmount() - productSelectionModule.getSelectedProductPrice();
-            if(moneyChange == 0.0) {
+            if(moneyChange < 0.0) {
+                message = INSERTION_PROMPT_MESSAGE;
+                changeReturn = 0.0;
+                productOut = NO_PRODUCT_OUT;
+            }
+            else if(moneyChange == 0.0) {
                 message = SUCCESS_MESSAGE;
                 changeReturn = moneyChange;
                 productOut = product;
