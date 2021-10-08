@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class ProductSelectionModuleImpl implements ProductSelectionModule{
+    private static final String UNSELECTED = "NONE";
     private final ProductRepo productRepo;
     private String selectedProduct;
 
@@ -52,9 +53,10 @@ public class ProductSelectionModuleImpl implements ProductSelectionModule{
     @Override
     public boolean selectProduct(String product) {
         boolean result = false;
-        if(validProducts.contains(product) && productRepo.isProductAvailable(product)) {
-            selectedProduct = product;
-            result = true;
+        if(validProducts.contains(product)) {
+            boolean isAvailable = productRepo.isProductAvailable(product);
+            selectedProduct =  isAvailable ? product : UNSELECTED;
+            result = isAvailable;
         }
         return result;
     }

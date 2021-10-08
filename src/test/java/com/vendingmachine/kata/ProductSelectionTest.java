@@ -46,4 +46,11 @@ public class ProductSelectionTest {
 
         assertFalse(actual);
     }
+
+    @Test
+    void test_selecting_invalid_product() {
+        boolean actual = moduleUnderTest.selectProduct("cola");
+
+        assertFalse(actual);
+    }
 }
