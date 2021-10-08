@@ -70,12 +70,15 @@ public class VendingMachine {
     }
 
     public Triplet<String, Double, String> buyProduct(String product) {
-        String message; Double moneyReturn; String productOut;
+        String message;
+        Double moneyReturn;
+        String productOut;
         boolean isSelectSuccessful = productSelectionModule.selectProduct(product);
         Double moneyDifference = coinInsertionModule.getAcceptedAmount() - productSelectionModule.getSelectedProductPrice();
         message = getMessageAfterBuyingAttempt(moneyDifference, isSelectSuccessful);
         moneyReturn = getMoneyChangeAfterBuyingAttempt(moneyDifference, isSelectSuccessful);
-        productOut = updateProductOutForBuyingProduct(moneyDifference, product, isSelectSuccessful);
+        productOut = getProductOutAfterBuyingAttempt(moneyDifference, product, isSelectSuccessful);
+        if(! productOut.equals(NO_PRODUCT_OUT)) productSelectionModule.disposeSelectedProduct();
         return Triplet.with(message, moneyReturn, productOut);
     }
     private String getMessageAfterBuyingAttempt(Double moneyDifference, boolean isSelectSuccessful) {
@@ -110,7 +113,7 @@ public class VendingMachine {
         return moneyReturn;
     }
 
-    private String updateProductOutForBuyingProduct(Double moneyDifference, String product, boolean isSelectSuccessful) {
+    private String getProductOutAfterBuyingAttempt(Double moneyDifference, String product, boolean isSelectSuccessful) {
         String productOut;
         if(isSelectSuccessful && (moneyDifference == 0.0 || (moneyDifference > 0.0 && moneyDifference < moneyChangeModule.getAvailableMoney()))) {
             productOut = product;

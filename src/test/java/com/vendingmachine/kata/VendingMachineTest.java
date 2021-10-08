@@ -23,8 +23,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @ExtendWith(MockitoExtension.class)
@@ -128,6 +127,8 @@ public class VendingMachineTest {
         String expectedMessage = "THANK YOU";
         Double expectedMoneyReturn = 0.0;
         String expectedProductOut = "cola";
+        verify(productSelectionModule, times(1)).disposeSelectedProduct();
+        verifyNoMoreInteractions(productSelectionModule);
         assertEquals(expectedMessage, actualMessage);
         assertEquals(expectedMoneyReturn, actualMoneyReturn);
         assertEquals(expectedProductOut, actualProductOut);
@@ -150,6 +151,8 @@ public class VendingMachineTest {
         String expectedMessage = "THANK YOU";
         Double expectedMoneyReturn = 0.50;
         String expectedProductOut = "cola";
+        verify(productSelectionModule, times(1)).disposeSelectedProduct();
+        verifyNoMoreInteractions(productSelectionModule);
         assertEquals(expectedMessage, actualMessage);
         assertEquals(expectedMoneyReturn, actualMoneyReturn);
         assertEquals(expectedProductOut, actualProductOut);
@@ -172,6 +175,7 @@ public class VendingMachineTest {
         String expectedMessage = "EXACT CHANGE ONLY";
         Double expectedMoneyReturn = 1.5;
         String expectedProductOut = "NONE";
+        verifyNoMoreInteractions(productSelectionModule);
         assertEquals(expectedMessage, actualMessage);
         assertEquals(expectedMoneyReturn, actualMoneyReturn);
         assertEquals(expectedProductOut, actualProductOut);
@@ -192,6 +196,7 @@ public class VendingMachineTest {
         String expectedMessage = "INSERT COIN";
         Double expectedMoneyReturn = 0.0;
         String expectedProductOut = "NONE";
+        verifyNoMoreInteractions(productSelectionModule);
         assertEquals(expectedMessage, actualMessage);
         assertEquals(expectedMoneyReturn, actualMoneyReturn);
         assertEquals(expectedProductOut, actualProductOut);
@@ -201,6 +206,7 @@ public class VendingMachineTest {
     void buy_product_test_invalid_product() {
         String product = "ice cream";
         when(productSelectionModule.selectProduct(anyString())).thenReturn(false);
+        when(productSelectionModule.getSelectedProductPrice()).thenReturn(0.0);
         when(coinInsertionModule.returnAllAcceptedAmount()).thenReturn(1.50);
 
         Triplet<String, Double, String> actualOutput = machineUnderTest.buyProduct(product);
@@ -211,6 +217,7 @@ public class VendingMachineTest {
         String expectedMessage = "CANNOT FIND PRODUCT";
         Double expectedMoneyReturn = 1.50;
         String expectedProductOut = "NONE";
+        verifyNoMoreInteractions(productSelectionModule);
         assertEquals(expectedMessage, actualMessage);
         assertEquals(expectedMoneyReturn, actualMoneyReturn);
         assertEquals(expectedProductOut, actualProductOut);
