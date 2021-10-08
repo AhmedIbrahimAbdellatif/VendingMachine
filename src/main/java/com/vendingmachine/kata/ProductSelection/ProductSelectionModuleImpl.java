@@ -9,6 +9,7 @@ import java.util.HashSet;
 
 public class ProductSelectionModuleImpl implements ProductSelectionModule{
     private final ProductRepo productRepo;
+    private String selectedProduct;
 
     public ProductSelectionModuleImpl(ProductRepo productRepo) {
         this.productRepo = productRepo;
@@ -47,9 +48,15 @@ public class ProductSelectionModuleImpl implements ProductSelectionModule{
             return productSet;
         }
     }
+    private static HashSet<String> validProducts = Products.namesSet();
     @Override
     public boolean selectProduct(String product) {
-        return false;
+        boolean result = false;
+        if(validProducts.contains(product) && productRepo.isProductAvailable(product)) {
+            selectedProduct = product;
+            result = true;
+        }
+        return result;
     }
 
     @Override
