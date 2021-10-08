@@ -6,4 +6,6 @@ public interface ProductRepo {
     boolean isProductAvailable(String product);
 
     String getSelected();
+
+    void popSelected();
 }

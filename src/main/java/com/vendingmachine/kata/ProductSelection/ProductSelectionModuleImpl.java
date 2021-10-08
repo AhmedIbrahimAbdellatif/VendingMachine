@@ -62,6 +62,11 @@ public class ProductSelectionModuleImpl implements ProductSelectionModule{
     }
 
     @Override
+    public void disposeSelectedProduct() {
+        productRepo.popSelected();
+    }
+
+    @Override
     public Double getSelectedProductPrice() {
         String selectedProduct = productRepo.getSelected();
         Double price = (selectedProduct.equals(UNSELECTED)) ? 0.0 : productNamePrice.get(selectedProduct);

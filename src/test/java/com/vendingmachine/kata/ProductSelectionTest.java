@@ -37,6 +37,7 @@ public class ProductSelectionTest {
         boolean actual = moduleUnderTest.selectProduct("cola");
 
         verify(productRepo, times(1)).select("cola");
+        verifyNoMoreInteractions(productRepo);
         assertTrue(actual);
     }
 
@@ -47,6 +48,7 @@ public class ProductSelectionTest {
         boolean actual = moduleUnderTest.selectProduct("cola");
 
         verify(productRepo, times(1)).select("NONE");
+        verifyNoMoreInteractions(productRepo);
         assertFalse(actual);
     }
 
@@ -66,5 +68,13 @@ public class ProductSelectionTest {
         Double actualPrice = moduleUnderTest.getSelectedProductPrice();
 
         assertEquals(expectedPrice, actualPrice);
+    }
+
+    @Test
+    void test_dispose_selected() {
+        moduleUnderTest.disposeSelectedProduct();
+
+        verify(productRepo, times(1)).popSelected();
+        verifyNoMoreInteractions(productRepo);
     }
 }
