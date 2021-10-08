@@ -84,7 +84,7 @@ public class VendingMachineTest {
         List<String> coins = List.of("dollar", "cent");
         when(coinInsertionModule.acceptCoins(anyList())).thenReturn(false);
         when(coinInsertionModule.getAcceptedAmount()).thenReturn(0.0);
-        when(coinInsertionModule.takeRejectedCoinsBack()).thenReturn(List.of("dollar", "cent"));
+        when(coinInsertionModule.returnRejectedCoinsBack()).thenReturn(List.of("dollar", "cent"));
 
         Pair<String, List<String>> actualOutput = machineUnderTest.insertCoins(coins);
         String actualMessage = actualOutput.getValue(VendingMachine.ParameterOrder.MESSAGE.ordinal()).toString();
@@ -101,7 +101,7 @@ public class VendingMachineTest {
         List<String> coins = List.of("nickel", "dime", "quarter", "dollar", "cent");
         when(coinInsertionModule.acceptCoins(anyList())).thenReturn(false);
         when(coinInsertionModule.getAcceptedAmount()).thenReturn(0.4);
-        when(coinInsertionModule.takeRejectedCoinsBack()).thenReturn(List.of("dollar", "cent"));
+        when(coinInsertionModule.returnRejectedCoinsBack()).thenReturn(List.of("dollar", "cent"));
 
         Pair<String, List<String>> actualOutput = machineUnderTest.insertCoins(coins);
         String actualMessage = actualOutput.getValue(VendingMachine.ParameterOrder.MESSAGE.ordinal()).toString();

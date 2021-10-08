@@ -52,7 +52,7 @@ public class VendingMachine {
 
         List<String> rejectedCoins = new ArrayList<>();
         if(!isAllCoinsAccepted) {
-            rejectedCoins = coinInsertionModule.takeRejectedCoinsBack();
+            rejectedCoins = coinInsertionModule.returnRejectedCoinsBack();
         }
 
         return Pair.with(message, rejectedCoins);
