@@ -75,4 +75,21 @@ public class VendingMachineTest {
         assertEquals(expectedMessage, actualMessage);
         assertThat(actualCoinReturn, containsInAnyOrder(expectedCoinReturn.toArray()));
     }
+
+    @Test
+    void insert_coins_test_accepting_valid_coins_and_returning_invalid_ones() {
+        List<String> coins = List.of("nickel", "dime", "quarter", "dollar", "cent");
+        when(coinInsertionModule.acceptCoins(anyList())).thenReturn(false);
+        when(coinInsertionModule.getAcceptedAmount()).thenReturn(0.4);
+        when(coinInsertionModule.takeRejectedCoinsBack()).thenReturn(List.of("dollar", "cent"));
+
+        Pair<String, List<String>> actualOutput = machineUnderTest.insertCoins(coins);
+        String actualMessage = actualOutput.getValue(VendingMachine.ParameterOrder.MESSAGE.ordinal()).toString();
+        List<String> actualCoinReturn = (List<String>)actualOutput.getValue(VendingMachine.ParameterOrder.COIN_RETURN.ordinal());
+
+        String expectedMessage = "$0.4";
+        List<String> expectedCoinReturn = List.of("dollar", "cent");
+        assertEquals(expectedMessage, actualMessage);
+        assertThat(actualCoinReturn, containsInAnyOrder(expectedCoinReturn.toArray()));
+    }
 }
