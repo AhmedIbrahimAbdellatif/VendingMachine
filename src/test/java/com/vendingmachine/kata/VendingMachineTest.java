@@ -2,6 +2,7 @@ package com.vendingmachine.kata;
 
 import com.vendingmachine.kata.CoinInsertion.CoinInsertionModule;
 import com.vendingmachine.kata.Machine.VendingMachine;
+import com.vendingmachine.kata.MoneyChange.MoneyChangeModule;
 import org.javatuples.Pair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -29,17 +30,31 @@ public class VendingMachineTest {
     VendingMachine machineUnderTest;
     @Mock
     CoinInsertionModule coinInsertionModule;
+    @Mock
+    MoneyChangeModule moneyChangeModule;
 
     @BeforeEach
     void setUp() {
-        machineUnderTest = new VendingMachine(coinInsertionModule);
+        machineUnderTest = new VendingMachine(coinInsertionModule, moneyChangeModule);
     }
 
     @Test
-    void start_machine() {
+    void start_machine_default() {
+        when(moneyChangeModule.isMoneyAvailable()).thenReturn(true);
+
         String actualMessage = machineUnderTest.start();
 
         String expectedMessage = "INSERT COIN";
+        assertEquals(expectedMessage, actualMessage);
+    }
+
+    @Test
+    void start_machine_no_money_for_change() {
+        when(moneyChangeModule.isMoneyAvailable()).thenReturn(false);
+
+        String actualMessage = machineUnderTest.start();
+
+        String expectedMessage = "EXACT CHANGE ONLY";
         assertEquals(expectedMessage, actualMessage);
     }
 
