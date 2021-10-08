@@ -63,7 +63,7 @@ public class VendingMachineTest {
     }
 
     @Test
-    void insert_coins_test_accepting_valid_coins() {
+    void test_accepting_valid_coins() {
         List<String> coins = List.of("nickel", "dime", "quarter");
         when(coinInsertionModule.acceptCoins(anyList())).thenReturn(true);
         when(coinInsertionModule.getAcceptedAmount()).thenReturn(0.4);
@@ -79,7 +79,7 @@ public class VendingMachineTest {
     }
 
     @Test
-    void insert_coins_test_rejecting_invalid_coins() {
+    void test_rejecting_invalid_coins() {
         List<String> coins = List.of("dollar", "cent");
         when(coinInsertionModule.acceptCoins(anyList())).thenReturn(false);
         when(coinInsertionModule.getAcceptedAmount()).thenReturn(0.0);
@@ -96,7 +96,7 @@ public class VendingMachineTest {
     }
 
     @Test
-    void insert_coins_test_accepting_valid_coins_and_returning_invalid_ones() {
+    void test_accepting_valid_coins_and_returning_invalid_ones() {
         List<String> coins = List.of("nickel", "dime", "quarter", "dollar", "cent");
         when(coinInsertionModule.acceptCoins(anyList())).thenReturn(false);
         when(coinInsertionModule.getAcceptedAmount()).thenReturn(0.4);
@@ -113,7 +113,7 @@ public class VendingMachineTest {
     }
 
     @Test
-    void buy_product_test_valid_product_money_equal_price() {
+    void test_buying_valid_product_with_money_equal_price() {
         String product = "cola";
         when(productSelectionModule.selectProduct(anyString())).thenReturn(true);
         when(productSelectionModule.getSelectedProductPrice()).thenReturn(1.00);
@@ -135,7 +135,7 @@ public class VendingMachineTest {
     }
 
     @Test
-    void buy_product_test_valid_product_money_more_than_price_change_available() {
+    void test_buying_valid_product_with_money_more_than_price_and_change_available() {
         String product = "cola";
         when(productSelectionModule.selectProduct(anyString())).thenReturn(true);
         when(productSelectionModule.getSelectedProductPrice()).thenReturn(1.00);
@@ -159,7 +159,7 @@ public class VendingMachineTest {
     }
 
     @Test
-    void buy_product_test_valid_product_money_more_than_price_no_change_available() {
+    void test_buying_valid_product_with_money_more_than_price_but_no_change_available() {
         String product = "cola";
         when(productSelectionModule.selectProduct(anyString())).thenReturn(true);
         when(productSelectionModule.getSelectedProductPrice()).thenReturn(1.00);
@@ -182,7 +182,7 @@ public class VendingMachineTest {
     }
 
     @Test
-    void buy_product_test_valid_product_money_less_than_price() {
+    void test_buying_valid_product_with_money_less_than_price() {
         String product = "cola";
         when(productSelectionModule.selectProduct(anyString())).thenReturn(true);
         when(productSelectionModule.getSelectedProductPrice()).thenReturn(1.00);
@@ -203,7 +203,7 @@ public class VendingMachineTest {
     }
 
     @Test
-    void buy_product_test_invalid_product() {
+    void test_buying_invalid_product() {
         String product = "ice cream";
         when(productSelectionModule.selectProduct(anyString())).thenReturn(false);
         when(productSelectionModule.getSelectedProductPrice()).thenReturn(0.0);
@@ -224,7 +224,7 @@ public class VendingMachineTest {
     }
 
     @Test
-    void return_back_all_money() {
+    void test_return_back_all_money() {
         when(coinInsertionModule.returnAllAcceptedAmount()).thenReturn(1.50);
 
         Double actualMoneyReturn = machineUnderTest.returnBackAllMoney();
