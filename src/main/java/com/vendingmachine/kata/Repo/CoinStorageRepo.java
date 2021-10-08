@@ -10,4 +10,6 @@ public interface CoinStorageRepo {
     void addRejected(String coin);
 
     List<String> popRejectedCoins();
+
+    Double popAcceptedAmount();
 }
