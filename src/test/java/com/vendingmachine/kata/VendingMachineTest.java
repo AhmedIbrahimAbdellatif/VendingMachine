@@ -196,4 +196,23 @@ public class VendingMachineTest {
         assertEquals(expectedChangeReturn, actualChangeReturn);
         assertEquals(expectedProductOut, actualProductOut);
     }
+
+    @Test
+    void buy_product_test_invalid_product() {
+        String product = "ice cream";
+        when(productSelectionModule.selectProduct(anyString())).thenReturn(false);
+        when(coinInsertionModule.returnAllAcceptedAmount()).thenReturn(1.50);
+
+        Triplet<String, Double, String> actualOutput = machineUnderTest.buyProduct(product);
+        String actualMessage = actualOutput.getValue(VendingMachine.ParameterOrder.MESSAGE.ordinal()).toString();
+        Double actualChangeReturn = (Double)actualOutput.getValue(VendingMachine.ParameterOrder.MONEY_RETURN.ordinal());
+        String actualProductOut = actualOutput.getValue(VendingMachine.ParameterOrder.PRODUCT.ordinal()).toString();
+
+        String expectedMessage = "CANNOT FIND PRODUCT";
+        Double expectedChangeReturn = 1.50;
+        String expectedProductOut = "NONE";
+        assertEquals(expectedMessage, actualMessage);
+        assertEquals(expectedChangeReturn, actualChangeReturn);
+        assertEquals(expectedProductOut, actualProductOut);
+    }
 }
