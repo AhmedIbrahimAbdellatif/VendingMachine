@@ -5,23 +5,32 @@ import java.util.List;
 
 import com.vendingmachine.kata.CoinInsertion.CoinInsertionModule;
 import com.vendingmachine.kata.MoneyChange.MoneyChangeModule;
+import com.vendingmachine.kata.ProductSelection.ProductSelectionModule;
 import org.javatuples.Pair;
+import org.javatuples.Triplet;
 
 public class VendingMachine {
     private static final String DEFAULT_MESSAGE = "INSERT COIN";
     private static final String NO_MONEY_FOR_CHANGE_MESSAGE = "EXACT CHANGE ONLY";
     private static final String INSERTION_PROMPT_MESSAGE = "INSERT COIN";
+    private static final String SUCCESS_MESSAGE = "THANK YOU";
+    private static final String INVALID_PRODUCT_MESSAGE = "CANNOT FIND PRODUCT";
+
+
     public static enum ParameterOrder {
         MESSAGE,
-        COIN_RETURN
+        MONEY_RETURN,
+        PRODUCT
     }
 
     private final CoinInsertionModule coinInsertionModule;
     private final MoneyChangeModule moneyChangeModule;
+    private final ProductSelectionModule productSelectionModule;
 
-    public VendingMachine(CoinInsertionModule coinInsertionModule, MoneyChangeModule moneyChangeModule) {
+    public VendingMachine(CoinInsertionModule coinInsertionModule, MoneyChangeModule moneyChangeModule, ProductSelectionModule productSelectionModule) {
         this.coinInsertionModule = coinInsertionModule;
         this.moneyChangeModule = moneyChangeModule;
+        this.productSelectionModule = productSelectionModule;
     }
 
     public String start() {
@@ -58,5 +67,21 @@ public class VendingMachine {
             message = "$" + coinInsertionModule.getAcceptedAmount().toString();
         }
         return message;
+    }
+
+    public Triplet<String, Double, String> buyProduct(String product) {
+        String message = "";
+        Double changeReturn = 0.0;
+        String productOut = "";
+        boolean isSelectSuccessful = productSelectionModule.selectProduct(product);
+        if(isSelectSuccessful) {
+            Double moneyChange = coinInsertionModule.getAcceptedAmount() - productSelectionModule.getSelectedProductPrice();
+            if(moneyChange >= 0.0) {
+                message = SUCCESS_MESSAGE;
+                productOut = product;
+                changeReturn = moneyChange;
+            }
+        }
+        return Triplet.with(message, changeReturn, productOut);
     }
 }

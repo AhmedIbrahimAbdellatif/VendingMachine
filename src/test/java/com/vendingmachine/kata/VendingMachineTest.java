@@ -3,7 +3,9 @@ package com.vendingmachine.kata;
 import com.vendingmachine.kata.CoinInsertion.CoinInsertionModule;
 import com.vendingmachine.kata.Machine.VendingMachine;
 import com.vendingmachine.kata.MoneyChange.MoneyChangeModule;
+import com.vendingmachine.kata.ProductSelection.ProductSelectionModule;
 import org.javatuples.Pair;
+import org.javatuples.Triplet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -21,6 +23,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -32,10 +35,12 @@ public class VendingMachineTest {
     CoinInsertionModule coinInsertionModule;
     @Mock
     MoneyChangeModule moneyChangeModule;
+    @Mock
+    ProductSelectionModule productSelectionModule;
 
     @BeforeEach
     void setUp() {
-        machineUnderTest = new VendingMachine(coinInsertionModule, moneyChangeModule);
+        machineUnderTest = new VendingMachine(coinInsertionModule, moneyChangeModule, productSelectionModule);
     }
 
     @Test
@@ -66,7 +71,7 @@ public class VendingMachineTest {
 
         Pair<String, List<String>> actualOutput = machineUnderTest.insertCoins(coins);
         String actualMessage = actualOutput.getValue(VendingMachine.ParameterOrder.MESSAGE.ordinal()).toString();
-        List<String> actualCoinReturn = (List<String>)actualOutput.getValue(VendingMachine.ParameterOrder.COIN_RETURN.ordinal());
+        List<String> actualCoinReturn = (List<String>)actualOutput.getValue(VendingMachine.ParameterOrder.MONEY_RETURN.ordinal());
 
         String expectedMessage = "$0.4";
         List<String> expectedCoinReturn = new ArrayList<>();
@@ -83,7 +88,7 @@ public class VendingMachineTest {
 
         Pair<String, List<String>> actualOutput = machineUnderTest.insertCoins(coins);
         String actualMessage = actualOutput.getValue(VendingMachine.ParameterOrder.MESSAGE.ordinal()).toString();
-        List<String> actualCoinReturn = (List<String>)actualOutput.getValue(VendingMachine.ParameterOrder.COIN_RETURN.ordinal());
+        List<String> actualCoinReturn = (List<String>)actualOutput.getValue(VendingMachine.ParameterOrder.MONEY_RETURN.ordinal());
 
         String expectedMessage = "INSERT COIN";
         List<String> expectedCoinReturn = coins;
@@ -100,11 +105,31 @@ public class VendingMachineTest {
 
         Pair<String, List<String>> actualOutput = machineUnderTest.insertCoins(coins);
         String actualMessage = actualOutput.getValue(VendingMachine.ParameterOrder.MESSAGE.ordinal()).toString();
-        List<String> actualCoinReturn = (List<String>)actualOutput.getValue(VendingMachine.ParameterOrder.COIN_RETURN.ordinal());
+        List<String> actualCoinReturn = (List<String>)actualOutput.getValue(VendingMachine.ParameterOrder.MONEY_RETURN.ordinal());
 
         String expectedMessage = "$0.4";
         List<String> expectedCoinReturn = List.of("dollar", "cent");
         assertEquals(expectedMessage, actualMessage);
         assertThat(actualCoinReturn, containsInAnyOrder(expectedCoinReturn.toArray()));
+    }
+
+    @Test
+    void buy_product_test_valid_product_money_equal_price_success() {
+        String product = "cola";
+        when(productSelectionModule.selectProduct(anyString())).thenReturn(true);
+        when(productSelectionModule.getSelectedProductPrice()).thenReturn(1.00);
+        when(coinInsertionModule.getAcceptedAmount()).thenReturn(1.00);
+
+        Triplet<String, Double, String> actualOutput = machineUnderTest.buyProduct(product);
+        String actualMessage = actualOutput.getValue(VendingMachine.ParameterOrder.MESSAGE.ordinal()).toString();
+        Double actualChangeReturn = (Double)actualOutput.getValue(VendingMachine.ParameterOrder.MONEY_RETURN.ordinal());
+        String actualProductOut = actualOutput.getValue(VendingMachine.ParameterOrder.PRODUCT.ordinal()).toString();
+
+        String expectedMessage = "THANK YOU";
+        Double expectedChangeReturn = 0.0;
+        String expectedProductOut = "cola";
+        assertEquals(expectedMessage, actualMessage);
+        assertEquals(expectedChangeReturn, actualChangeReturn);
+        assertEquals(expectedProductOut, actualProductOut);
     }
 }
