@@ -31,7 +31,7 @@ public class CoinInsertionTest {
     }
 
     @Test
-    void accept_coins_test_all_valid() {
+    void test_accepting_all_valid_coins() {
         List<String> coins = List.of("nickle", "dime", "quarter");
 
         boolean actual = moduleUnderTest.acceptCoins(coins);
@@ -44,7 +44,7 @@ public class CoinInsertionTest {
     }
 
     @Test
-    void accept_coins_test_detecting_invalid() {
+    void test_detecting_invalid_coins() {
         List<String> coins = List.of("nickle", "dime", "quarter", "cent");
 
         boolean actual = moduleUnderTest.acceptCoins(coins);
