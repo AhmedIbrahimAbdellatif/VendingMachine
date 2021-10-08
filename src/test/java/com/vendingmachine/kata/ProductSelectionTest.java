@@ -7,12 +7,13 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
@@ -55,5 +56,15 @@ public class ProductSelectionTest {
 
         verifyNoInteractions(productRepo);
         assertFalse(actual);
+    }
+
+    @ParameterizedTest
+    @CsvSource({"cola, 1.00", "chips, 0.5", "NONE, 0.0"})
+    void test_get_selected_product_price(String product, Double expectedPrice) {
+        when(productRepo.getSelected()).thenReturn(product);
+
+        Double actualPrice = moduleUnderTest.getSelectedProductPrice();
+
+        assertEquals(expectedPrice, actualPrice);
     }
 }

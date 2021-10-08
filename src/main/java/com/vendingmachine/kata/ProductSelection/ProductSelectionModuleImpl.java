@@ -1,6 +1,5 @@
 package com.vendingmachine.kata.ProductSelection;
 
-import com.vendingmachine.kata.CoinInsertion.CoinInsertionModuleImpl;
 import com.vendingmachine.kata.Repo.ProductRepo;
 import org.javatuples.Pair;
 
@@ -40,7 +39,7 @@ public class ProductSelectionModuleImpl implements ProductSelectionModule{
             return nameSet;
         }
 
-        public static HashMap<String, Double> nameValueSet(){
+        public static HashMap<String, Double> namePriceSet(){
             HashMap<String, Double> productSet = new HashMap<>();
             for (Products p: Products.values()) {
                 productSet.put(p.getName(), p.getValue());
@@ -49,6 +48,7 @@ public class ProductSelectionModuleImpl implements ProductSelectionModule{
         }
     }
     private static HashSet<String> validProducts = Products.namesSet();
+    private static HashMap<String, Double> productNamePrice = Products.namePriceSet();
     @Override
     public boolean selectProduct(String product) {
         boolean result = false;
@@ -63,6 +63,8 @@ public class ProductSelectionModuleImpl implements ProductSelectionModule{
 
     @Override
     public Double getSelectedProductPrice() {
-        return null;
+        String selectedProduct = productRepo.getSelected();
+        Double price = (selectedProduct.equals(UNSELECTED)) ? 0.0 : productNamePrice.get(selectedProduct);
+        return price;
     }
 }
