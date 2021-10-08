@@ -25,7 +25,7 @@ public class CoinInsertionModuleImpl implements CoinInsertionModule{
             return (String)this.nameValuePair.getValue(0);
         }
 
-        private Double getNameValuePair() {
+        private Double getValue() {
             return (Double) this.nameValuePair.getValue(1);
         }
 
@@ -40,7 +40,7 @@ public class CoinInsertionModuleImpl implements CoinInsertionModule{
         public static HashMap<String, Double> nameValueSet(){
             HashMap<String, Double> coinSet = new HashMap<>();
             for (Coins c: Coins.values()) {
-                coinSet.put(c.getName(), c.getNameValuePair());
+                coinSet.put(c.getName(), c.getValue());
             }
             return coinSet;
         }
