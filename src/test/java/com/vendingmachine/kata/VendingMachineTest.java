@@ -215,4 +215,14 @@ public class VendingMachineTest {
         assertEquals(expectedChangeReturn, actualChangeReturn);
         assertEquals(expectedProductOut, actualProductOut);
     }
+
+    @Test
+    void return_back_all_money() {
+        when(coinInsertionModule.returnAllAcceptedAmount()).thenReturn(1.50);
+
+        Double actualMoneyReturn = machineUnderTest.returnBackAllMoney();
+
+        Double expectedMoneyReturn = 1.50;
+        assertEquals(expectedMoneyReturn, actualMoneyReturn);
+    }
 }

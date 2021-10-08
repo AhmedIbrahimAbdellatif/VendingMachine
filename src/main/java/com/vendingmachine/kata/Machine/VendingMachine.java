@@ -120,4 +120,8 @@ public class VendingMachine {
         }
         return productOut;
     }
+
+    public Double returnBackAllMoney() {
+        return coinInsertionModule.returnAllAcceptedAmount();
+    }
 }
