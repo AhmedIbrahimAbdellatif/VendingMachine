@@ -122,14 +122,14 @@ public class VendingMachineTest {
 
         Triplet<String, Double, String> actualOutput = machineUnderTest.buyProduct(product);
         String actualMessage = actualOutput.getValue(VendingMachine.ParameterOrder.MESSAGE.ordinal()).toString();
-        Double actualChangeReturn = (Double)actualOutput.getValue(VendingMachine.ParameterOrder.MONEY_RETURN.ordinal());
+        Double actualMoneyReturn = (Double)actualOutput.getValue(VendingMachine.ParameterOrder.MONEY_RETURN.ordinal());
         String actualProductOut = actualOutput.getValue(VendingMachine.ParameterOrder.PRODUCT.ordinal()).toString();
 
         String expectedMessage = "THANK YOU";
-        Double expectedChangeReturn = 0.0;
+        Double expectedMoneyReturn = 0.0;
         String expectedProductOut = "cola";
         assertEquals(expectedMessage, actualMessage);
-        assertEquals(expectedChangeReturn, actualChangeReturn);
+        assertEquals(expectedMoneyReturn, actualMoneyReturn);
         assertEquals(expectedProductOut, actualProductOut);
     }
 
@@ -144,14 +144,14 @@ public class VendingMachineTest {
 
         Triplet<String, Double, String> actualOutput = machineUnderTest.buyProduct(product);
         String actualMessage = actualOutput.getValue(VendingMachine.ParameterOrder.MESSAGE.ordinal()).toString();
-        Double actualChangeReturn = (Double)actualOutput.getValue(VendingMachine.ParameterOrder.MONEY_RETURN.ordinal());
+        Double actualMoneyReturn = (Double)actualOutput.getValue(VendingMachine.ParameterOrder.MONEY_RETURN.ordinal());
         String actualProductOut = actualOutput.getValue(VendingMachine.ParameterOrder.PRODUCT.ordinal()).toString();
 
         String expectedMessage = "THANK YOU";
-        Double expectedChangeReturn = 0.50;
+        Double expectedMoneyReturn = 0.50;
         String expectedProductOut = "cola";
         assertEquals(expectedMessage, actualMessage);
-        assertEquals(expectedChangeReturn, actualChangeReturn);
+        assertEquals(expectedMoneyReturn, actualMoneyReturn);
         assertEquals(expectedProductOut, actualProductOut);
     }
 
@@ -166,14 +166,14 @@ public class VendingMachineTest {
 
         Triplet<String, Double, String> actualOutput = machineUnderTest.buyProduct(product);
         String actualMessage = actualOutput.getValue(VendingMachine.ParameterOrder.MESSAGE.ordinal()).toString();
-        Double actualChangeReturn = (Double)actualOutput.getValue(VendingMachine.ParameterOrder.MONEY_RETURN.ordinal());
+        Double actualMoneyReturn = (Double)actualOutput.getValue(VendingMachine.ParameterOrder.MONEY_RETURN.ordinal());
         String actualProductOut = actualOutput.getValue(VendingMachine.ParameterOrder.PRODUCT.ordinal()).toString();
 
         String expectedMessage = "EXACT CHANGE ONLY";
-        Double expectedChangeReturn = 1.5;
+        Double expectedMoneyReturn = 1.5;
         String expectedProductOut = "NONE";
         assertEquals(expectedMessage, actualMessage);
-        assertEquals(expectedChangeReturn, actualChangeReturn);
+        assertEquals(expectedMoneyReturn, actualMoneyReturn);
         assertEquals(expectedProductOut, actualProductOut);
     }
 
@@ -186,14 +186,14 @@ public class VendingMachineTest {
 
         Triplet<String, Double, String> actualOutput = machineUnderTest.buyProduct(product);
         String actualMessage = actualOutput.getValue(VendingMachine.ParameterOrder.MESSAGE.ordinal()).toString();
-        Double actualChangeReturn = (Double)actualOutput.getValue(VendingMachine.ParameterOrder.MONEY_RETURN.ordinal());
+        Double actualMoneyReturn = (Double)actualOutput.getValue(VendingMachine.ParameterOrder.MONEY_RETURN.ordinal());
         String actualProductOut = actualOutput.getValue(VendingMachine.ParameterOrder.PRODUCT.ordinal()).toString();
 
         String expectedMessage = "INSERT COIN";
-        Double expectedChangeReturn = 0.0;
+        Double expectedMoneyReturn = 0.0;
         String expectedProductOut = "NONE";
         assertEquals(expectedMessage, actualMessage);
-        assertEquals(expectedChangeReturn, actualChangeReturn);
+        assertEquals(expectedMoneyReturn, actualMoneyReturn);
         assertEquals(expectedProductOut, actualProductOut);
     }
 
@@ -205,14 +205,14 @@ public class VendingMachineTest {
 
         Triplet<String, Double, String> actualOutput = machineUnderTest.buyProduct(product);
         String actualMessage = actualOutput.getValue(VendingMachine.ParameterOrder.MESSAGE.ordinal()).toString();
-        Double actualChangeReturn = (Double)actualOutput.getValue(VendingMachine.ParameterOrder.MONEY_RETURN.ordinal());
+        Double actualMoneyReturn = (Double)actualOutput.getValue(VendingMachine.ParameterOrder.MONEY_RETURN.ordinal());
         String actualProductOut = actualOutput.getValue(VendingMachine.ParameterOrder.PRODUCT.ordinal()).toString();
 
         String expectedMessage = "CANNOT FIND PRODUCT";
-        Double expectedChangeReturn = 1.50;
+        Double expectedMoneyReturn = 1.50;
         String expectedProductOut = "NONE";
         assertEquals(expectedMessage, actualMessage);
-        assertEquals(expectedChangeReturn, actualChangeReturn);
+        assertEquals(expectedMoneyReturn, actualMoneyReturn);
         assertEquals(expectedProductOut, actualProductOut);
     }
 

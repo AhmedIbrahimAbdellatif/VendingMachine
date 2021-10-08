@@ -48,7 +48,7 @@ public class VendingMachine {
 
         boolean isAllCoinsAccepted = coinInsertionModule.acceptCoins(coins);
 
-        String message = updateCoinInsertionMessage();
+        String message = getMessageAfterCoinInsertion();
 
         List<String> rejectedCoins = new ArrayList<>();
         if(!isAllCoinsAccepted) {
@@ -58,7 +58,7 @@ public class VendingMachine {
         return Pair.with(message, rejectedCoins);
     }
 
-    private String updateCoinInsertionMessage() {
+    private String getMessageAfterCoinInsertion() {
         String message;
         if(coinInsertionModule.getAcceptedAmount() == 0.0) {
             message = INSERTION_PROMPT_MESSAGE;
@@ -70,23 +70,23 @@ public class VendingMachine {
     }
 
     public Triplet<String, Double, String> buyProduct(String product) {
-        String message; Double changeReturn; String productOut;
+        String message; Double moneyReturn; String productOut;
         boolean isSelectSuccessful = productSelectionModule.selectProduct(product);
-        Double moneyChange = coinInsertionModule.getAcceptedAmount() - productSelectionModule.getSelectedProductPrice();
-        message = updateMessageForBuyingProduct(moneyChange, isSelectSuccessful);
-        changeReturn = updateChangeReturnForBuyingProduct(moneyChange, isSelectSuccessful);
-        productOut = updateProductOutForBuyingProduct(moneyChange, product, isSelectSuccessful);
-        return Triplet.with(message, changeReturn, productOut);
+        Double moneyDifference = coinInsertionModule.getAcceptedAmount() - productSelectionModule.getSelectedProductPrice();
+        message = getMessageAfterBuyingAttempt(moneyDifference, isSelectSuccessful);
+        moneyReturn = getMoneyChangeAfterBuyingAttempt(moneyDifference, isSelectSuccessful);
+        productOut = updateProductOutForBuyingProduct(moneyDifference, product, isSelectSuccessful);
+        return Triplet.with(message, moneyReturn, productOut);
     }
-    private String updateMessageForBuyingProduct(Double moneyChange, boolean isSelectSuccessful) {
+    private String getMessageAfterBuyingAttempt(Double moneyDifference, boolean isSelectSuccessful) {
         String message;
         if(isSelectSuccessful == false) {
             message = INVALID_PRODUCT_MESSAGE;
         }
-        else if(moneyChange < 0.0) {
+        else if(moneyDifference < 0.0) {
             message = INSERTION_PROMPT_MESSAGE;
         }
-        else if(moneyChange > moneyChangeModule.getAvailableMoney()) {
+        else if(moneyDifference > moneyChangeModule.getAvailableMoney()) {
             message = NO_MONEY_FOR_CHANGE_MESSAGE;
         }
         else {
@@ -95,24 +95,24 @@ public class VendingMachine {
         return message;
     }
 
-    private Double updateChangeReturnForBuyingProduct(Double moneyChange, boolean isSelectSuccessful) {
-        Double changeReturn;
-        if(isSelectSuccessful == false || moneyChange > moneyChangeModule.getAvailableMoney()) {
-            changeReturn = coinInsertionModule.returnAllAcceptedAmount();
+    private Double getMoneyChangeAfterBuyingAttempt(Double moneyDifference, boolean isSelectSuccessful) {
+        Double moneyReturn;
+        if(isSelectSuccessful == false || moneyDifference > moneyChangeModule.getAvailableMoney()) {
+            moneyReturn = coinInsertionModule.returnAllAcceptedAmount();
         }
-        else if(moneyChange < 0.0) {
-            changeReturn = 0.0;
+        else if(moneyDifference < 0.0) {
+            moneyReturn = 0.0;
         }
         else {
-            changeReturn = moneyChange;
-            moneyChangeModule.decreaseMoneyBy(moneyChange);
+            moneyReturn = moneyDifference;
+            moneyChangeModule.decreaseMoneyBy(moneyDifference);
         }
-        return changeReturn;
+        return moneyReturn;
     }
 
-    private String updateProductOutForBuyingProduct(Double moneyChange, String product, boolean isSelectSuccessful) {
+    private String updateProductOutForBuyingProduct(Double moneyDifference, String product, boolean isSelectSuccessful) {
         String productOut;
-        if(isSelectSuccessful && (moneyChange == 0.0 || (moneyChange > 0.0 && moneyChange < moneyChangeModule.getAvailableMoney()))) {
+        if(isSelectSuccessful && (moneyDifference == 0.0 || (moneyDifference > 0.0 && moneyDifference < moneyChangeModule.getAvailableMoney()))) {
             productOut = product;
         }
         else {
