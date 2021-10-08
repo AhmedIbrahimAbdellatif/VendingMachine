@@ -15,7 +15,7 @@ public class VendingMachine {
     private static final String INSERTION_PROMPT_MESSAGE = "INSERT COIN";
     private static final String SUCCESS_MESSAGE = "THANK YOU";
     private static final String INVALID_PRODUCT_MESSAGE = "CANNOT FIND PRODUCT";
-
+    private static final String NO_PRODUCT_OUT = "NONE";
 
     public static enum ParameterOrder {
         MESSAGE,
@@ -80,6 +80,17 @@ public class VendingMachine {
                 message = SUCCESS_MESSAGE;
                 changeReturn = moneyChange;
                 productOut = product;
+            }
+            else if (moneyChange > 0.0 && moneyChange < moneyChangeModule.getAvailableMoney()) {
+                message = SUCCESS_MESSAGE;
+                changeReturn = moneyChange;
+                productOut = product;
+                moneyChangeModule.decreaseMoneyBy(moneyChange);
+            }
+            else if (moneyChange > 0.0 && moneyChange > moneyChangeModule.getAvailableMoney()) {
+                message = NO_MONEY_FOR_CHANGE_MESSAGE;
+                changeReturn = coinInsertionModule.returnAllAcceptedAmount();
+                productOut = NO_PRODUCT_OUT;
             }
         }
         return Triplet.with(message, changeReturn, productOut);

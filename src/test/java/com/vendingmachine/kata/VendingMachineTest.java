@@ -22,8 +22,8 @@ import static java.util.List.of;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -128,6 +128,50 @@ public class VendingMachineTest {
         String expectedMessage = "THANK YOU";
         Double expectedChangeReturn = 0.0;
         String expectedProductOut = "cola";
+        assertEquals(expectedMessage, actualMessage);
+        assertEquals(expectedChangeReturn, actualChangeReturn);
+        assertEquals(expectedProductOut, actualProductOut);
+    }
+
+    @Test
+    void buy_product_test_valid_product_money_more_than_price_change_available() {
+        String product = "cola";
+        when(productSelectionModule.selectProduct(anyString())).thenReturn(true);
+        when(productSelectionModule.getSelectedProductPrice()).thenReturn(1.00);
+        when(coinInsertionModule.getAcceptedAmount()).thenReturn(1.50);
+        when(moneyChangeModule.getAvailableMoney()).thenReturn(1.00);
+        doNothing().when(moneyChangeModule).decreaseMoneyBy(anyDouble());
+
+        Triplet<String, Double, String> actualOutput = machineUnderTest.buyProduct(product);
+        String actualMessage = actualOutput.getValue(VendingMachine.ParameterOrder.MESSAGE.ordinal()).toString();
+        Double actualChangeReturn = (Double)actualOutput.getValue(VendingMachine.ParameterOrder.MONEY_RETURN.ordinal());
+        String actualProductOut = actualOutput.getValue(VendingMachine.ParameterOrder.PRODUCT.ordinal()).toString();
+
+        String expectedMessage = "THANK YOU";
+        Double expectedChangeReturn = 0.50;
+        String expectedProductOut = "cola";
+        assertEquals(expectedMessage, actualMessage);
+        assertEquals(expectedChangeReturn, actualChangeReturn);
+        assertEquals(expectedProductOut, actualProductOut);
+    }
+
+    @Test
+    void buy_product_test_valid_product_money_more_than_price_no_change_available() {
+        String product = "cola";
+        when(productSelectionModule.selectProduct(anyString())).thenReturn(true);
+        when(productSelectionModule.getSelectedProductPrice()).thenReturn(1.00);
+        when(coinInsertionModule.getAcceptedAmount()).thenReturn(1.50);
+        when(moneyChangeModule.getAvailableMoney()).thenReturn(0.40);
+        when(coinInsertionModule.returnAllAcceptedAmount()).thenReturn(1.50);
+
+        Triplet<String, Double, String> actualOutput = machineUnderTest.buyProduct(product);
+        String actualMessage = actualOutput.getValue(VendingMachine.ParameterOrder.MESSAGE.ordinal()).toString();
+        Double actualChangeReturn = (Double)actualOutput.getValue(VendingMachine.ParameterOrder.MONEY_RETURN.ordinal());
+        String actualProductOut = actualOutput.getValue(VendingMachine.ParameterOrder.PRODUCT.ordinal()).toString();
+
+        String expectedMessage = "EXACT CHANGE ONLY";
+        Double expectedChangeReturn = 1.5;
+        String expectedProductOut = "NONE";
         assertEquals(expectedMessage, actualMessage);
         assertEquals(expectedChangeReturn, actualChangeReturn);
         assertEquals(expectedProductOut, actualProductOut);
