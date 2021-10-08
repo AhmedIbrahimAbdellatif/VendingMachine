@@ -70,7 +70,7 @@ public class CoinInsertionModuleImpl implements CoinInsertionModule{
 
     @Override
     public List<String> returnRejectedCoinsBack() {
-        return null;
+        return coinStorageRepo.popRejectedCoins();
     }
 
     @Override

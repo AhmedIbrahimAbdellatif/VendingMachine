@@ -64,4 +64,12 @@ public class CoinInsertionTest {
         verify(coinStorageRepo, times(1)).getStoredAmount();
         verifyNoMoreInteractions(coinStorageRepo);
     }
+
+    @Test
+    void test_get_rejected_coins() {
+        moduleUnderTest.returnRejectedCoinsBack();
+
+        verify(coinStorageRepo, times(1)).popRejectedCoins();
+        verifyNoMoreInteractions(coinStorageRepo);
+    }
 }
