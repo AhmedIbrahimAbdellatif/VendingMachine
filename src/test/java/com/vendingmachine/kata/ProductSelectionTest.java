@@ -14,7 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @ExtendWith(MockitoExtension.class)
@@ -35,6 +35,7 @@ public class ProductSelectionTest {
 
         boolean actual = moduleUnderTest.selectProduct("cola");
 
+        verify(productRepo, times(1)).select("cola");
         assertTrue(actual);
     }
 
@@ -44,13 +45,15 @@ public class ProductSelectionTest {
 
         boolean actual = moduleUnderTest.selectProduct("cola");
 
+        verify(productRepo, times(1)).select("NONE");
         assertFalse(actual);
     }
 
     @Test
     void test_selecting_invalid_product() {
-        boolean actual = moduleUnderTest.selectProduct("cola");
+        boolean actual = moduleUnderTest.selectProduct("ice cream");
 
+        verifyNoInteractions(productRepo);
         assertFalse(actual);
     }
 }

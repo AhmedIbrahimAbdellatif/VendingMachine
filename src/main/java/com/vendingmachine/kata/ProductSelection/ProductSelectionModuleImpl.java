@@ -10,7 +10,6 @@ import java.util.HashSet;
 public class ProductSelectionModuleImpl implements ProductSelectionModule{
     private static final String UNSELECTED = "NONE";
     private final ProductRepo productRepo;
-    private String selectedProduct;
 
     public ProductSelectionModuleImpl(ProductRepo productRepo) {
         this.productRepo = productRepo;
@@ -55,7 +54,8 @@ public class ProductSelectionModuleImpl implements ProductSelectionModule{
         boolean result = false;
         if(validProducts.contains(product)) {
             boolean isAvailable = productRepo.isProductAvailable(product);
-            selectedProduct =  isAvailable ? product : UNSELECTED;
+            String selectedProduct =  isAvailable ? product : UNSELECTED;
+            productRepo.select(selectedProduct);
             result = isAvailable;
         }
         return result;
